@@ -9,7 +9,9 @@
   Provide for c.rerun() as an alias to c.invalidate()
 */
 MeteorComputation = function (fn) {
-  var computation, lastReturnVal;
+  var computation,
+      lastReturnVal;
+
   Tracker.autorun(function (c) {
     if (c.firstRun) computation = c;
     lastReturnVal = fn.call();
@@ -18,13 +20,28 @@ MeteorComputation = function (fn) {
   _.extend(computation, {
     rerun: function () {
       computation.invalidate();
-      //XXX wont work cuz async - could be a Promise though
-      return lastReturnVal;
+      return computation.nextValue();
     },
-    lastReturnValue: function () {
-      return lastReturnVal;
+    nextValue: function () {
+      return new Promise (function (resolve) {
+        Tracker.afterFlush(function () {
+          resolve(lastReturnVal);
+        });
+      });
     }
   });
+
+  Object.defineProperty(computation, "currentValue", {
+    get: function () {
+      return lastReturnVal;
+    }
+  })
+  Object.defineProperty(computation, "value", {
+    get: function () {
+      return computation.nextValue();
+    }
+  })
+
   return computation;
 }.bind(Meteor);
 
