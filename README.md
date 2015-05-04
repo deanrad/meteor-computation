@@ -10,35 +10,51 @@ See a demo at [meteor-computation.meteor.com](meteor-computation.meteor.com).
     meteor add deanius:meteor-computation
 ```
 
-## Purpose
-
-Store and return a reference to the computation created by
-`Tracker.autorun`. Capture the reference the function passed
-to Tracker.autorun receives.
-(Only set the reference the first time the autorun runs,
-which is immediately and synchronously)
-
-Provide for `c.rerun()` as an alias to `c.invalidate()`,
-but providing any return value from the function.
-
-
 ## Description
 
-`Tracker.autorun` - a Meteor expression we love to hate. Why? Well, what is `Tracker` anyhow?
-
-I think the API is more descriptive if:
+`Tracker.autorun` - a useful API that I think could be more useful if:
 
   * The functionality is under the `Meteor` namespace/object, like most other goodies
-  * The action of running `Tracker.autorun` would return an object pointing to the computation, the point of which would be a handle to the computation to `stop` it, `invalidate` it, etc..
-
-  Furthermore
-  * The term `rerun` has been provided as an alias for `invalidate`. It sounds more descriptive to me, but YMMV.
+  * `Tracker.autorun` would have a meaningful return value, namely an object pointing to the computation, the point of which could be to `stop` it, `invalidate` it, etc..
+  * There could be a meaning given to the return value of the function given to `Tracker.autorun`
 
 ## Examples
 
 ```
-d = new ReactiveVar(1), c = new ReactiveVar(2)
-b = new Meteor.Computation(function(){ console.log("c+d=", c.get()+d.get()) });
+var d = new ReactiveVar(1),
+    c = new ReactiveVar(2);
+var b = new Meteor.Computation(function(){
+  var sum = c.get() + d.get();
+
+  // the side-effect to occur when c or d change
+  console.log("c+d=", sum);
+
+  // the value of the computation
+  return sum;
+});
 >> c+d=3
+
+b.currentValue
+>>3
+
+// the .currentValue property doesn't wait for a flush - it can lag behind
+c.set(2.1); console.log("not yet 3.1: ", b.currentValue);
+>> not yet 3.1: 3
+>> c+d=3.1
+
+b.currentValue
+>> 3.1       // but now it has changed
+
+// using the .value property, you can get a promise for the eventual value
+
+c.set(2.2); b.value.then(function(newVal){ console.info(newVal); })
+>> c+d=3.2
+>> 3.2
+
+// rerun a computation, and get a promise for its result with .rerun()
+b.rerun().then(function(newVal){ console.info(newVal); });
+>> c+d=3.2
+>> 3.2
+
 
 ```
