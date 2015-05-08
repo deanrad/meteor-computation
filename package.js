@@ -2,7 +2,7 @@ Package.describe({
   name: "deanius:meteor-computation",
   summary: "Provide Meteor.Computation alias for Tracker.autorun",
   version: "0.1.1",
-  git: "https://github.com/chicagogrooves/meteor-meteor-computation"
+  git: "https://github.com/chicagogrooves/meteor-computation"
 });
 
 Package.onUse(function(api) {
