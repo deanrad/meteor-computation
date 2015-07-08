@@ -18,8 +18,9 @@ MeteorComputation = function (fn) {
   });
 
   _.extend(computation, {
-    rerun: function () {
+    rerun: function (async) {
       computation.invalidate();
+      if (!async) Tracker.flush();
       return computation.nextValue();
     },
     nextValue: function () {
