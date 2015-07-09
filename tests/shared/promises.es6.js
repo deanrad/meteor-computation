@@ -1,6 +1,6 @@
 Tinytest.addAsync('meteor-computation - nextValue - returns a promise for the next value', (test, done) => {
   let i=0;
-  let c = Meteor.Computation(() => {
+  const c = Meteor.Computation(() => {
     i++;
     return i;
   });

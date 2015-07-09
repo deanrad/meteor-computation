@@ -45,14 +45,9 @@ c.set(2.1); console.log("not yet 3.1: ", b.currentValue);
 b.currentValue
 >> 3.1       // but now it has changed
 
-// using the .value property, you can get a promise for the eventual value
+// using the .nextValue method, you can get a promise for the eventual value
 
-c.set(2.2); b.value.then(function(newVal){ console.info(newVal); })
->> c+d=3.2
->> 3.2
-
-// rerun a computation, and get a promise for its result with .rerun()
-b.rerun().then(function(newVal){ console.info(newVal); });
+c.set(2.2); b.nextValue.then(function(newVal){ console.info(newVal); })
 >> c+d=3.2
 >> 3.2
 
