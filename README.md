@@ -1,4 +1,5 @@
-# deanius:meteor-computation
+# deanius:meteor-computation [![Build Status](https://secure.travis-ci.org/chicagogrooves/meteor-computation.png?branch=master)](https://travis-ci.org/chicagogrooves/meteor-computation)
+
 
 Provide Meteor.Computation alias for Tracker.autorun
 
