@@ -23,4 +23,5 @@ Package.onTest(function (api) {
 
   api.addFiles("tests/shared/index.es6.js", ["client", "server"]);
   api.addFiles("tests/shared/promises.es6.js", ["client", "server"]);
+  api.addFiles("tests/shared/chain.es6.js", ["client", "server"]);
 });

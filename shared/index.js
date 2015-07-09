@@ -10,9 +10,12 @@
 */
 MeteorComputation = function (fn, context) {
   var lastReturnVal;
-  var computation = Tracker.autorun(function () {
-    lastReturnVal = fn.call(context);
+  var dep = new Tracker.Dependency();
+  var computation = Tracker.autorun(function (c) {
+    lastReturnVal = fn.call(context, c);
+    dep.changed();
   });
+  computation.dep = dep;
 
   _.extend(computation, {
     nextValue: function () {
@@ -21,6 +24,10 @@ MeteorComputation = function (fn, context) {
           resolve(lastReturnVal);
         });
       });
+    },
+    value: function () {
+      dep.depend();
+      return lastReturnVal;
     },
     rerun: function (async) {
       computation.invalidate();
