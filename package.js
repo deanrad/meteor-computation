@@ -18,9 +18,9 @@ Package.onUse(function(api) {
 Package.onTest(function (api) {
   api.use("tinytest");
   api.use(["reactive-var"]);
-  api.use("mquandalle:harmony");
+  api.use("grigio:babel");
   api.use("deanius:meteor-computation");
 
-  api.addFiles("tests/shared/index.next.js", ["client", "server"]);
-
+  api.addFiles("tests/shared/index.es6.js", ["client", "server"]);
+  api.addFiles("tests/shared/promises.es6.js", ["client", "server"]);
 });
